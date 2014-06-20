@@ -1,0 +1,54 @@
+###################################
+##        LAMP with a WAR        ##
+###################################
+
+# The VM
+VM {
+	alias: Virtual Machine;
+	installer: iaas;
+	children: MySQL, Tomcat, Apache;
+}
+
+# MySQL database
+MySQL {
+	alias: MySQL;
+	installer: logger;
+	exports: ip, port = 3306;
+}
+
+# Tomcat
+Tomcat {
+	alias: Tomcat with Rubis;
+	installer: logger;
+	exports: ip;
+	children: WAR;
+	# All the components with the WAR facet will be considered as children.
+}
+
+# Apache Load Balancer
+Apache {
+	alias: Apache Load Balancer;
+	installer: logger;
+	imports: WAR.ip, WAR.application-path, WAR.portAJP;
+}
+
+# WAR Applications
+# We use a facet to reduce writing (in particular in the Apache imports).
+
+facet WAR {
+	installer: logger;
+	exports: ip, application-path, portAJP;
+}
+
+# This one does not need a database.
+War_HelloWorld {
+	alias: A Hello World web application;
+	facets: WAR;
+}
+
+# This one does.
+War_ECom {
+	alias: An e-commerce application;
+	facets: WAR;
+	imports: MySQL.ip, MySQL.port;
+}

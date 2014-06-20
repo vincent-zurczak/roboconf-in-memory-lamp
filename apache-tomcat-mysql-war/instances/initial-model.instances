@@ -1,0 +1,35 @@
+# A VM with Apache only
+instanceof VM {
+	name: Apache VM;
+	
+	instanceof Apache {
+		name: Apache;
+	}
+}
+
+# A VM with MySQL only
+instanceof VM {
+	name: MySQL VM;
+	
+	instanceof MySQL {
+		name: MySQL;
+	}
+}
+
+# Tomcat VMs
+instanceof VM {
+	name: Tomcat VM ;
+	count: 2;
+	
+	instanceof Tomcat {
+		name: Tomcat;
+		
+		instanceof War_ECom {
+			name: ECom;
+		}
+		
+		instanceof War_HelloWorld {
+			name: Hello World;
+		}
+	}
+}
